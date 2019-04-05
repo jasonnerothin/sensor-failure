@@ -169,7 +169,9 @@ cd bash
 # wait...
 ```
 
-- run [InitKafkaImpl](src/main/scala/com/ubiquibit/buoy/jobs/setup/InitKafka.scala) 
+1. Batch load using [bash/Load-SE-USA-buoys-to-Kafka.sh](batch script) ~ follow instructions in script...
+
+2. OR run [InitKafkaImpl](src/main/scala/com/ubiquibit/buoy/jobs/setup/InitKafka.scala) 
 
 > It loads one (text) data feed per run from filesystem - recommend 3-4 runs for simple setup.
 
