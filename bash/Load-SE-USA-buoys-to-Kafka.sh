@@ -5,15 +5,19 @@
 # Pre-req:              Data files have been downloaded to the the data directory
 # Post-condition:       Historical data for these buoys is in its Kafka topic. E.g.: 41010-TXT
 
-# To prep these for the WxStream application, run com.ubiquibit.buoy.jobs.util.StageFeeds.scala
-
 readonly SPARK_HOME="/Users/jason/sbin/spark-2.4.0-bin-hadoop2.7" ;
 readonly SPARK_HOST="Flob.local" ;
 readonly SRCDIR="/Users/jason/scratch/sensor-failure" ;
 
 # Note: 16 seems to be a good pause for my machine. If you see things backing up in the SparkUI, back it off to a larger number...
 
-# You can verify it worked, by using: ${KAFKA_HOME}/bin/kafka-console-consumer.sh --bootstrap-server ${KAFKA_HOST}:9092 --topic 41139-TXT --from-beginning
+# TO verify it worked
+# USE: ${KAFKA_HOME}/bin/kafka-console-consumer.sh --bootstrap-server ${KAFKA_HOST}:9092 --topic 41139-TXT --from-beginning
+# AND/OR: ./redis-login.sh
+# redis:6379> hmget "stationId:41113" "TXT"
+# 1) "KAFKALOADED"
+
+# To prep these for the WxStream application, run com.ubiquibit.buoy.jobs.util.StageFeeds.scala
 
 /bin/bash ${SPARK_HOME}/bin/spark-submit --class "com.ubiquibit.buoy.jobs.setup.InitKafkaImpl" --master "spark://${SPARK_HOST}:7077" --deploy-mode cluster --executor-cores 2 --packages "org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.0" "${SRCDIR}/target/scala-2.11/sensorfailure-assembly-1.0.jar" 41002 ; sleep 16 ;
 /bin/bash ${SPARK_HOME}/bin/spark-submit --class "com.ubiquibit.buoy.jobs.setup.InitKafkaImpl" --master "spark://${SPARK_HOST}:7077" --deploy-mode cluster --executor-cores 2 --packages "org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.0" "${SRCDIR}/target/scala-2.11/sensorfailure-assembly-1.0.jar" 41004 ; sleep 16 ;
